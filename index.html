@@ -3,114 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Quiz Luana & Adailton</title>
+    <title>Quiz Bodas de Prata - Luana & Adailton</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --verde: #5a6b47; /* Verde da sua logo */
+            --verde-oliva: #5a6b47;
             --dourado: #b5a46d;
-            --off-white: #fafaf8;
+            --fundo: #fafaf8;
+            --branco: #ffffff;
         }
 
         body {
-            background-color: var(--off-white);
+            background-color: var(--fundo);
             font-family: 'Montserrat', sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            color: var(--verde);
+            min-height: 100vh;
+            color: var(--verde-oliva);
         }
 
         #game-container {
             width: 90%;
-            max-width: 500px;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 450px;
+            background: var(--branco);
+            padding: 40px 20px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(90, 107, 71, 0.15);
             text-align: center;
-            border: 2px solid var(--dourado);
-            position: relative;
+            border: 1px solid rgba(181, 164, 109, 0.3);
         }
 
-        .logo-font {
+        .logo-texto {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 2.8em;
+            margin: 0;
+            color: var(--verde-oliva);
         }
 
-        .progress-bar {
-            height: 8px;
-            background: #eee;
-            border-radius: 4px;
-            margin: 20px 0;
+        .data-evento {
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: var(--dourado);
         }
 
-        #progress {
-            height: 100%;
-            background: var(--dourado);
-            width: 0%;
-            transition: 0.5s;
-            border-radius: 4px;
+        .header-quiz {
+            margin-bottom: 30px;
         }
 
-        .pergunta {
-            font-size: 1.2em;
+        .nivel-tag {
+            background: var(--verde-oliva);
+            color: var(--branco);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            text-transform: uppercase;
             font-weight: bold;
-            margin-bottom: 25px;
-            min-height: 60px;
         }
 
-        .opcoes {
+        .pergunta-box {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin: 20px 0 30px 0;
+            min-height: 80px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .opcoes-container {
+            display: grid;
+            gap: 15px;
         }
 
         .btn-opcao {
-            padding: 15px;
-            border: 2px solid var(--verde);
-            background: transparent;
-            color: var(--verde);
-            border-radius: 10px;
-            cursor: pointer;
+            background: var(--branco);
+            border: 2px solid var(--verde-oliva);
+            color: var(--verde-oliva);
+            padding: 18px;
+            border-radius: 15px;
             font-size: 1em;
             font-weight: 600;
-            transition: all 0.2s;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
         }
 
-        .btn-opcao:hover {
-            background: #f0f3eb;
+        .btn-opcao:active {
+            transform: scale(0.98);
         }
 
-        .btn-opcao.correct {
-            background-color: #2ecc71 !important;
+        /* Cores de Feedback */
+        .btn-opcao.selecionada {
+            background: var(--dourado);
             color: white;
-            border-color: #27ae60;
+            border-color: var(--dourado);
         }
 
-        .btn-opcao.wrong {
-            background-color: #e74c3c !important;
-            color: white;
-            border-color: #c0392b;
+        .btn-opcao.correta {
+            background: #27ae60 !important;
+            color: white !important;
+            border-color: #27ae60 !important;
         }
 
-        #final-screen {
+        .btn-opcao.errada {
+            background: #c0392b !important;
+            color: white !important;
+            border-color: #c0392b !important;
+        }
+
+        #tela-final {
             display: none;
+            animation: fadeIn 1s;
         }
 
-        .frase-codigo {
-            font-size: 1.5em;
-            color: var(--dourado);
-            font-weight: bold;
-            margin-top: 20px;
-            padding: 15px;
+        .codigo-box {
+            background: var(--fundo);
             border: 2px dashed var(--dourado);
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--verde-oliva);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .footer-logo {
+            margin-top: 30px;
+            opacity: 0.5;
+            font-size: 0.8em;
         }
     </style>
 </head>
@@ -118,108 +146,128 @@
 
     <div id="game-container">
         <img src="logo.png" width="100">
-        <div class="logo-font">Luana & Adailton</div>
-        <div id="quiz-ui">
-            <div class="progress-bar"><div id="progress"></div></div>
-            <div id="level-text" style="font-size: 0.8em; color: var(--dourado); margin-bottom: 5px;">Nível: Iniciante</div>
-            <div class="pergunta" id="questionText">Carregando...</div>
-            <div class="opcoes" id="optionsContainer"></div>
+        <div class="header-quiz">
+            <h1 class="logo-texto">Luana & Adailton</h1>
+            <div class="data-evento">09.05.26</div>
         </div>
 
-        <div id="final-screen">
-            <h2 class="logo-font">Parabéns!</h2>
-            <p>Você provou que conhece bem o casal!</p>
-            <p>Diga a frase abaixo ao bartender para seu drink especial:</p>
-            <div class="frase-codigo">"O AMOR ESTÁ NO DRINK"</div>
-            <p style="font-size: 0.8em; margin-top: 20px;">Válido apenas para hoje: 09/05/2026</p>
+        <div id="quiz-fase">
+            <span id="nivel" class="nivel-tag">Carregando...</span>
+            <div id="pergunta" class="pergunta-box">Preparado para começar?</div>
+            
+            <div id="opcoes" class="opcoes-container">
+                </div>
         </div>
+
+        <div id="tela-final">
+            <h2 class="logo-texto">Parabéns!</h2>
+            <p>Você é um expert na história do casal!</p>
+            <p>Apresente o código abaixo ao bartender:</p>
+            <div class="codigo-box">O AMOR ESTÁ NO DRINK</div>
+            <p style="font-size: 0.8em;">Beba com moderação e divirta-se!</p>
+        </div>
+
+        <div class="footer-logo">Bodas de Prata</div>
     </div>
 
-    <audio id="snd-correct" src="https://actions.google.com/sounds/v1/cartoon/clime_up_the_ladder.ogg"></audio>
-    <audio id="snd-wrong" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
+    <audio id="som-suspense" src="https://www.myinstants.com/media/sounds/show-do-milhao-suspense.mp3" loop></audio>
+    <audio id="som-acerto" src="https://www.myinstants.com/media/sounds/certa-resposta-silvio-santos.mp3"></audio>
+    <audio id="som-erro" src="https://www.myinstants.com/media/sounds/errou-silvio-santos.mp3"></audio>
 
     <script>
-        const questions = [
+        const perguntas = [
             {
                 q: "Qual o nome do filho do casal?",
                 options: ["Lucas", "Luan", "Leonardo"],
                 correct: 1,
-                level: "Super Fácil"
+                level: "Nível: Super Fácil"
             },
             {
                 q: "O que estamos comemorando hoje?",
                 options: ["Bodas de Cristal", "Bodas de Porcelana", "Bodas de Prata"],
                 correct: 2,
-                level: "Fácil"
+                level: "Nível: Fácil"
             },
             {
                 q: "Em que ano o casal se conheceu?",
                 options: ["1998", "2000", "2001"],
                 correct: 0,
-                level: "Médio"
+                level: "Nível: Médio"
             },
             {
                 q: "Onde o Adailton e a Luana se conheceram?",
                 options: ["Na Faculdade", "No Quartel", "No Tênis"],
                 correct: 1,
-                level: "Desafio Final"
+                level: "Nível: Expert"
             }
         ];
 
-        let currentQ = 0;
-        const questionText = document.getElementById('questionText');
-        const optionsContainer = document.getElementById('optionsContainer');
-        const progress = document.getElementById('progress');
-        const levelText = document.getElementById('level-text');
+        let perguntaAtual = 0;
+        const somSuspense = document.getElementById('som-suspense');
+        const somAcerto = document.getElementById('som-acerto');
+        const somErro = document.getElementById('som-erro');
 
-        function loadQuestion() {
-            const qData = questions[currentQ];
-            questionText.innerText = qData.q;
-            levelText.innerText = `Nível: ${qData.level}`;
-            optionsContainer.innerHTML = '';
-            progress.style.width = `${(currentQ / questions.length) * 100}%`;
+        function carregarPergunta() {
+            const dados = perguntas[perguntaAtual];
+            document.getElementById('nivel').innerText = dados.level;
+            document.getElementById('pergunta').innerText = dados.q;
+            
+            const container = document.getElementById('opcoes');
+            container.innerHTML = '';
 
-            qData.options.forEach((opt, index) => {
+            dados.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-opcao';
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index, btn);
-                optionsContainer.appendChild(btn);
+                btn.onclick = () => verificar(i, btn);
+                container.appendChild(btn);
             });
         }
 
-        function checkAnswer(selected, btn) {
-            const correct = questions[currentQ].correct;
-            const allBtns = document.querySelectorAll('.btn-opcao');
-            
-            allBtns.forEach(b => b.disabled = true);
+        function verificar(index, btn) {
+            // Tocar suspense na primeira interação
+            somSuspense.volume = 0.2;
+            somSuspense.play().catch(() => {});
 
-            if (selected === correct) {
-                btn.classList.add('correct');
-                document.getElementById('snd-correct').play();
+            const correta = perguntas[perguntaAtual].correct;
+            const botoes = document.querySelectorAll('.btn-opcao');
+            
+            // Desativar botões para evitar cliques múltiplos
+            botoes.forEach(b => b.disabled = true);
+
+            if (index === correta) {
+                btn.classList.add('correta');
+                somSuspense.pause();
+                somAcerto.play();
+
                 setTimeout(() => {
-                    currentQ++;
-                    if (currentQ < questions.length) {
-                        loadQuestion();
+                    perguntaAtual++;
+                    if (perguntaAtual < perguntas.length) {
+                        somSuspense.play();
+                        carregarPergunta();
                     } else {
-                        showFinal();
+                        finalizar();
                     }
-                }, 1500);
+                }, 3500); // Tempo para o áudio do Silvio Santos
             } else {
-                btn.classList.add('wrong');
-                document.getElementById('snd-wrong').play();
+                btn.classList.add('errada');
+                somSuspense.pause();
+                somErro.play();
+
                 setTimeout(() => {
-                    alert("Ops! Tente novamente para ganhar o drink.");
-                    currentQ = 0; // Reinicia ou mantém? Aqui reinicia para dar emoção
-                    loadQuestion();
-                }, 1000);
+                    alert("Ah não! Você errou. Vamos recomeçar?");
+                    perguntaAtual = 0;
+                    somSuspense.play();
+                    carregarPergunta();
+                }, 2000);
             }
         }
 
-        function showFinal() {
-            document.getElementById('quiz-ui').style.display = 'none';
-            document.getElementById('final-screen').style.display = 'block';
-            progress.style.width = '100%';
+        function finalizar() {
+            document.getElementById('quiz-fase').style.display = 'none';
+            document.getElementById('tela-final').style.display = 'block';
+            
+            // Efeito de Confetes
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -228,7 +276,8 @@
             });
         }
 
-        loadQuestion();
+        // Iniciar quiz
+        carregarPergunta();
     </script>
 </body>
 </html>
