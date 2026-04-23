@@ -29,7 +29,7 @@
             width: 90%;
             max-width: 450px;
             background: var(--branco);
-            padding: 40px 20px;
+            padding: 30px 20px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(90, 107, 71, 0.15);
             text-align: center;
@@ -39,7 +39,7 @@
         .logo-texto {
             font-family: 'Great Vibes', cursive;
             font-size: 2.8em;
-            margin: 0;
+            margin: 10px 0 0 0;
             color: var(--verde-oliva);
         }
 
@@ -48,10 +48,6 @@
             letter-spacing: 2px;
             margin-bottom: 20px;
             color: var(--dourado);
-        }
-
-        .header-quiz {
-            margin-bottom: 30px;
         }
 
         .nivel-tag {
@@ -65,10 +61,10 @@
         }
 
         .pergunta-box {
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: 700;
-            margin: 20px 0 30px 0;
-            min-height: 80px;
+            margin: 20px 0;
+            min-height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,98 +72,78 @@
 
         .opcoes-container {
             display: grid;
-            gap: 15px;
+            gap: 12px;
         }
 
         .btn-opcao {
             background: var(--branco);
             border: 2px solid var(--verde-oliva);
             color: var(--verde-oliva);
-            padding: 18px;
+            padding: 15px;
             border-radius: 15px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            outline: none;
         }
 
-        .btn-opcao:active {
-            transform: scale(0.98);
-        }
+        .btn-opcao.correta { background: #27ae60 !important; color: white !important; border-color: #27ae60 !important; }
+        .btn-opcao.errada { background: #c0392b !important; color: white !important; border-color: #c0392b !important; }
 
-        /* Cores de Feedback */
-        .btn-opcao.selecionada {
-            background: var(--dourado);
-            color: white;
-            border-color: var(--dourado);
-        }
+        #tela-final, #tela-missao { display: none; animation: fadeIn 0.5s; }
 
-        .btn-opcao.correta {
-            background: #27ae60 !important;
-            color: white !important;
-            border-color: #27ae60 !important;
-        }
-
-        .btn-opcao.errada {
-            background: #c0392b !important;
-            color: white !important;
-            border-color: #c0392b !important;
-        }
-
-        #tela-final {
-            display: none;
-            animation: fadeIn 1s;
-        }
-
-        .codigo-box {
+        .codigo-box, .missao-box {
             background: var(--fundo);
             border: 2px dashed var(--dourado);
             padding: 20px;
-            margin: 25px 0;
-            font-size: 1.4em;
+            margin: 20px 0;
             font-weight: bold;
             color: var(--verde-oliva);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .missao-box { border-color: #c0392b; color: #c0392b; font-size: 1.1em; }
+        .codigo-box { font-size: 1.4em; }
+
+        .btn-recomeçar {
+            background: var(--verde-oliva);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
-        .footer-logo {
-            margin-top: 30px;
-            opacity: 0.5;
-            font-size: 0.8em;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <img src="logo.png" width="100">
-        <div class="header-quiz">
-            <h1 class="logo-texto">Luana & Adailton</h1>
-            <div class="data-evento">09.05.26</div>
-        </div>
+        <img src="logo.png" width="80" onerror="this.style.display='none'">
+        <h1 class="logo-texto">Luana & Adailton</h1>
+        <div class="data-evento">09.05.26</div>
 
         <div id="quiz-fase">
             <span id="nivel" class="nivel-tag">Carregando...</span>
-            <div id="pergunta" class="pergunta-box">Preparado para começar?</div>
-            
-            <div id="opcoes" class="opcoes-container">
-                </div>
+            <div id="pergunta" class="pergunta-box"></div>
+            <div id="opcoes" class="opcoes-container"></div>
         </div>
 
         <div id="tela-final">
             <h2 class="logo-texto">Parabéns!</h2>
             <p>Você é um expert na história do casal!</p>
-            <p>Apresente o código abaixo ao bartender:</p>
+            <p>Apresente o código ao bartender:</p>
             <div class="codigo-box">O AMOR ESTÁ NO DRINK</div>
-            <p style="font-size: 0.8em;">Beba com moderação e divirta-se!</p>
+            <p style="font-size: 0.8em;">Beba com moderação!</p>
         </div>
 
-        <div class="footer-logo">Bodas de Prata</div>
+        <div id="tela-missao">
+            <h2 class="logo-texto" style="color: #c0392b;">Quase lá...</h2>
+            <p>Você não acertou todas! Para tentar novamente e ganhar o drink, você deve cumprir esta missão:</p>
+            <div id="texto-missao" class="missao-box"></div>
+            <button class="btn-recomeçar" onclick="recomeçar()">JOGAR NOVAMENTE</button>
+        </div>
     </div>
 
     <audio id="som-suspense" src="https://www.myinstants.com/media/sounds/show-do-milhao-suspense.mp3" loop></audio>
@@ -176,42 +152,30 @@
 
     <script>
         const perguntas = [
-            {
-                q: "Qual o nome do filho do casal?",
-                options: ["Lucas", "Luan", "Leonardo"],
-                correct: 1,
-                level: "Nível: Super Fácil"
-            },
-            {
-                q: "O que estamos comemorando hoje?",
-                options: ["Bodas de Cristal", "Bodas de Porcelana", "Bodas de Prata"],
-                correct: 2,
-                level: "Nível: Fácil"
-            },
-            {
-                q: "Em que ano o casal se conheceu?",
-                options: ["1998", "2000", "2001"],
-                correct: 0,
-                level: "Nível: Médio"
-            },
-            {
-                q: "Onde o Adailton e a Luana se conheceram?",
-                options: ["Na Faculdade", "No Quartel", "No Tênis"],
-                correct: 1,
-                level: "Nível: Expert"
-            }
+            { q: "Qual o nome do filho do casal?", options: ["Lucas", "Luan", "Leonardo"], correct: 1, level: "Nível: Super Fácil" },
+            { q: "O que estamos comemorando hoje?", options: ["Bodas de Cristal", "Bodas de Porcelana", "Bodas de Prata"], correct: 2, level: "Nível: Fácil" },
+            { q: "Em que ano o casal se conheceu?", options: ["1998", "2000", "2001"], correct: 0, level: "Nível: Médio" },
+            { q: "Onde o Adailton e a Luana se conheceram?", options: ["Na Faculdade", "No Quartel", "No Tênis"], correct: 1, level: "Nível: Expert" }
+        ];
+
+        const missoes = [
+            "Pague um shot para quem está à sua esquerda!",
+            "Faça um brinde em voz alta ao casal agora!",
+            "Tire uma selfie com 2 pessoas de mesas diferentes!",
+            "Vá à pista e dance o 'passinho' por 30 segundos!",
+            "Encontre um padrinho e tire uma selfie!",
+            "Tire uma foto engraçada com o convidado mais elegante!",
+            "Vá ao bar e tome um shot de 'consolação'!"
         ];
 
         let perguntaAtual = 0;
+        let erros = 0;
         const somSuspense = document.getElementById('som-suspense');
-        const somAcerto = document.getElementById('som-acerto');
-        const somErro = document.getElementById('som-erro');
 
         function carregarPergunta() {
             const dados = perguntas[perguntaAtual];
             document.getElementById('nivel').innerText = dados.level;
             document.getElementById('pergunta').innerText = dados.q;
-            
             const container = document.getElementById('opcoes');
             container.innerHTML = '';
 
@@ -225,58 +189,54 @@
         }
 
         function verificar(index, btn) {
-            // Tocar suspense na primeira interação
             somSuspense.volume = 0.2;
             somSuspense.play().catch(() => {});
 
             const correta = perguntas[perguntaAtual].correct;
             const botoes = document.querySelectorAll('.btn-opcao');
-            
-            // Desativar botões para evitar cliques múltiplos
             botoes.forEach(b => b.disabled = true);
 
             if (index === correta) {
                 btn.classList.add('correta');
-                somSuspense.pause();
-                somAcerto.play();
-
-                setTimeout(() => {
-                    perguntaAtual++;
-                    if (perguntaAtual < perguntas.length) {
-                        somSuspense.play();
-                        carregarPergunta();
-                    } else {
-                        finalizar();
-                    }
-                }, 3500); // Tempo para o áudio do Silvio Santos
+                document.getElementById('som-acerto').play();
             } else {
                 btn.classList.add('errada');
-                somSuspense.pause();
-                somErro.play();
+                document.getElementById('som-erro').play();
+                erros++;
+            }
 
-                setTimeout(() => {
-                    alert("Ah não! Você errou. Vamos recomeçar?");
-                    perguntaAtual = 0;
-                    somSuspense.play();
+            setTimeout(() => {
+                perguntaAtual++;
+                if (perguntaAtual < perguntas.length) {
                     carregarPergunta();
-                }, 2000);
+                } else {
+                    finalizarJogo();
+                }
+            }, 3000);
+        }
+
+        function finalizarJogo() {
+            document.getElementById('quiz-fase').style.display = 'none';
+            somSuspense.pause();
+
+            if (erros === 0) {
+                document.getElementById('tela-final').style.display = 'block';
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#5a6b47', '#b5a46d'] });
+            } else {
+                const missaoAleatoria = missoes[Math.floor(Math.random() * missoes.length)];
+                document.getElementById('texto-missao').innerText = missaoAleatoria;
+                document.getElementById('tela-missao').style.display = 'block';
             }
         }
 
-        function finalizar() {
-            document.getElementById('quiz-fase').style.display = 'none';
-            document.getElementById('tela-final').style.display = 'block';
-            
-            // Efeito de Confetes
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#5a6b47', '#b5a46d', '#ffffff']
-            });
+        function recomeçar() {
+            perguntaAtual = 0;
+            erros = 0;
+            document.getElementById('tela-missao').style.display = 'none';
+            document.getElementById('quiz-fase').style.display = 'block';
+            carregarPergunta();
         }
 
-        // Iniciar quiz
         carregarPergunta();
     </script>
 </body>
